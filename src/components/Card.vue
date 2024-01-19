@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 import router from '../router/router';
+import store from '../store/store';
 
 const isOpenCard = ref(false);
 
@@ -12,9 +13,7 @@ const gotoCardDetail = () => router.push('/card-detail')
 
 defineExpose({ openCard, isOpenCard })
 
-const injectedData = inject<any>('dataKey');
-
-const data = ref(injectedData);
+const data = ref<any[]>(store.state.cart)
 
 </script>
 
@@ -29,10 +28,10 @@ const data = ref(injectedData);
             <div class=" list">
                 <div class="item-list" v-for="(item, index) in data" :key="index">
                     <div class="row1">
-                        <img src="https://conversestore.vn/wp-content/uploads/2021/08/1-10.jpg" height="55px" width="55px">
+                        <img :src="`${item.image}`" height="55px" width="55px">
                         <div class="name-item">{{ item.name }}</div>
                     </div>
-                    <div class="row2">2 x 1.900.000đ</div>
+                    <div class="row2">{{ item.quantity }} x 1.900.000đ</div>
                 </div>
             </div>
             <div class="check-out">

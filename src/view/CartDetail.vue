@@ -1,29 +1,44 @@
-<template>
-    <h1>GIỎ HÀNG</h1>
-    <div v-for="(data, index) in injectedData" :key="index" class="item">
-        <button class="delete-button" @click="deleteItem()">delete</button>
-        <img src="https://conversestore.vn/wp-content/uploads/2023/12/z4852163053846_61ebc9961cc589d0f1af057b9d980091.jpg"
-            height="50px" width="50px">
-        <p class="name">{{ data.name }}</p>
-        <p class="price">{{ data.price }}</p>
-        <Stepper class="stepper" />
-        <p class="temp-price">3.900.000₫</p>
-    </div>
-</template>
-
 <script setup lang="ts">
-
-import { inject } from 'vue';
+import { ref } from 'vue';
 import Stepper from '../components/Stepper.vue';
+import store from '../store/store';
 
-const injectedData = inject<any>('dataKey');
+const cart = ref<any[]>(store.state.cart)
 
-const deleteItem = () => {
-    inject('dataKey', injectedData.pop())
-    console.log(injectedData.length);
+const addToCart = (item: any) => {
+    store.commit('addToCart', {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        description: item.description,
+        image: item.image,
+    })
+}
+
+const removeFromCart = (item: any) => {
+    store.commit('removeFromCart', {
+        id: item.id,
+    })
+}
+
+const remove = (index: number) => {
+    store.commit('remove', index)
 }
 
 </script>
+
+<template>
+    <h1>GIỎ HÀNG</h1>
+    <div v-for="(item, index) in cart" :key="index" class="item">
+        <button class="delete-button" @click="remove(index)">delete</button>
+        <img :src="`${item.image}`" height="50px" width="50px">
+        <p class="name">{{ item.name }}</p>
+        <p class="price">{{ item.price }}</p>
+        <p class="quantity"> {{ item.quantity }}</p>
+        <Stepper class="stepper" v-on:increment="addToCart(item)" v-on:decrement="removeFromCart(item)" />
+        <p class="temp-price">{{ item.price * item.quantity }}₫</p>
+    </div>
+</template>
 
 <style scoped>
 .screen {

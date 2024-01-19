@@ -2,36 +2,47 @@ import { createStore } from 'vuex'
 
 function updateLocalStorage(cart) {
     localStorage.setItem('cart', JSON.stringify(cart))
-
 }
 
 const store = createStore(
     {
         state: {
-            // cart: []
-            data: 'Hello, Vuex!',
+            cart: []
         },
-        mutations: {
-            // productQuantity: state => product => {
-            //     const item = state.cart.find(i => i.id === product.id)
-            // }
+        getters: {
+            cartItems: state => {
+                return state.cart
+            }
+        },
 
-            updateData(state, newData) {
-                state.data = newData;
+        mutations: {
+            addToCart(state, product) {
+                let item = state.cart.find(i => i.id === product.id)
+                if (item) {
+                    item.quantity++;
+                } else {
+                    state.cart.push({ ...product, quantity: 1 })
+                }
+                updateLocalStorage(state.cart)
             },
-        },
-        actions: {
-            fetchData(context) {
-                // Perform async operation
-                // Commit mutation with the received data
-                context.commit('updateData', newData);
+
+            removeFromCart(state, product, index) {
+                let item = state.cart.find(i => i.id === product.id)
+                if (item.quantity > 1) {
+                    item.quantity--
+                }
+                updateLocalStorage(state.cart)
             },
+
+            remove(state, index) {
+                state.cart.splice(index, 1)
+                updateLocalStorage(state.cart)
+            }
         },
-        modules: {
-            uppercasedData(state) {
-                return state.data.toUpperCase();
-            },
-        },
+
+        actions: {},
+
+        modules: {},
     },
 );
 

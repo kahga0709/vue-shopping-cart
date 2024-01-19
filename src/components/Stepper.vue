@@ -5,12 +5,16 @@ const amount = ref<number>(1)
 
 const Increase = () => {
     amount.value++
+    emit('increment')
 }
 
 const Decrease = () => {
     if (amount.value <= 1) return
     amount.value--
+    emit('decrement')
 }
+
+const emit = defineEmits(['increment', 'decrement'])
 
 </script>
 
@@ -29,7 +33,6 @@ const Decrease = () => {
     background-color: #f9f9f9;
     border: 1px solid silver;
 }
-
 
 .amount {
     padding: 0px 15px;

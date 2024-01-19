@@ -2,7 +2,8 @@
 import Card from '../components/Card.vue';
 import MButton from '../components/MButton.vue';
 import Stepper from '../components/Stepper.vue';
-import { inject, onBeforeUpdate, ref } from 'vue'
+import { onBeforeUpdate, ref } from 'vue'
+import store from '../store/store';
 
 interface Props {
     id: number,
@@ -16,28 +17,21 @@ const props = defineProps<Props>()
 
 const cardRef = ref<any>(null);
 
-const injectedData = inject<any>('dataKey');
-
 const addToCart = () => {
     cardRef.value.openCard();
 
-    inject('dataKey', injectedData.push({
-        id: 4,
-        name: "product 4",
-        price: 4000000,
-        amount: 4,
-    },));
-
-    console.log(injectedData);
-
+    store.commit('addToCart', {
+        id: props.id,
+        name: props.name,
+        price: props.price,
+        description: props.description,
+        image: props.image,
+    })
 }
 
 onBeforeUpdate(() => {
-    props.price
+    //TODO: format price
 })
-
-
-
 </script>
 <template>
     <div class="detail-page">
