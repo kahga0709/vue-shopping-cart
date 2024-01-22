@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import router from '../router/router'
 import items from '../data/items'
 
-const products = ref(items)
+const word = ref<string>("");
+const sortSelected = ref<string>("")
+const products = ref<any>(items);
 
 const gotoDetail = (item: any) => {
     router.push(
@@ -19,16 +21,41 @@ const gotoDetail = (item: any) => {
         }
     )
 }
+
+const search = () => {
+    products.value = items.filter((item) =>
+        item.name.toLowerCase().includes(word.value.toLowerCase())
+    );;
+}
+
+function sort() {
+    if (sortSelected.value === "Giá giảm dần") {
+        products.value = items.sort((n1, n2) => n1.price - n2.price)
+    } else if (sortSelected.value === "Giá tăng dần") {
+        products.value = items.sort((n1, n2) => n2.price - n1.price)
+    }
+}
+
 </script>
 
 <template>
-    <div class="side-bar"></div>
-    <div class="list-product">
-        <div class="item" v-for="(item, index) in products" :key="index" @click="gotoDetail(item)">
-            <img class="item-image" :src="`${item.imageUrl}`">
-            <p>Converse, Sale hot</p>
-            <p>{{ item.name }}</p>
-            <p>950.000₫</p>
+    <div class="screen">
+        <input class="search-bar" type="text" v-model="word" placeholder="search sản phẩm" @change="search">
+        <div class="sort-container">
+            <select v-model="sortSelected" @change="sort">
+                <option disabled value="">Chọn kiểu sort</option>
+                <option>Giá giảm dần</option>
+                <option>Giá tăng dần</option>
+            </select>
+        </div>
+
+        <div class="list-product">
+            <div class="item" v-for="(item, index) in products" :key="index" @click="gotoDetail(item)">
+                <img class="item-image" :src="`${item.imageUrl}`">
+                <p>Converse, Sale hot</p>
+                <p>{{ item.name }}</p>
+                <p>{{ item.price }}₫</p>
+            </div>
         </div>
     </div>
 </template>
@@ -56,6 +83,28 @@ const gotoDetail = (item: any) => {
 p {
     padding: 0px;
     margin: 5px 10px;
+}
+
+.search-bar {
+    height: 40px;
+    width: 50%;
+}
+
+.screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sort-bar {
+    height: 30px;
+    display: flex;
+    background-color: aqua;
+}
+
+.sort-container {
+    width: 100%;
+    padding-left: 90px;
 }
 </style>
  

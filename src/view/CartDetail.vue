@@ -54,7 +54,7 @@ onBeforeMount(() => {
             v-on:decrement="decreaseQuantity(item)" />
         <p class="temp-price">{{ item.price * item.quantity }}₫</p>
     </div>
-    <div class="total-price-container">
+    <div class="total-price-container" v-show="total !== 0">
         <p class="total-price-title">TOTAL PRICE: </p>
         <p class="total-price">{{ total }}đ</p>
     </div>
