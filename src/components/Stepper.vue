@@ -1,28 +1,34 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const amount = ref<number>(1)
+const props = defineProps<{
+    initialQuantity?: number
+}>();
 
-const Increase = () => {
-    amount.value++
-    emit('increment')
+const quantity = ref<number>(props.initialQuantity ?? 1)
+
+const increase = () => {
+    quantity.value++
+    emit('increment', quantity.value)
+    emit('quantity', quantity.value)
 }
 
-const Decrease = () => {
-    if (amount.value <= 1) return
-    amount.value--
-    emit('decrement')
+const decrease = () => {
+    if (quantity.value <= 1) return
+    quantity.value--
+    emit('decrement', quantity.value)
+    emit('quantity', quantity.value)
 }
 
-const emit = defineEmits(['increment', 'decrement'])
+const emit = defineEmits(['increment', 'decrement', 'quantity'])
 
 </script>
 
 <template>
     <div class="wrap-stepper">
-        <button class="button decrease" @click="Decrease">-</button>
-        <span class="amount">{{ amount }} </span>
-        <button class="button increase" @click="Increase">+</button>
+        <button class="button decrease" @click="decrease">-</button>
+        <span class="amount">{{ quantity }} </span>
+        <button class="button increase" @click="increase">+</button>
     </div>
 </template>
 

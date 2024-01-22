@@ -14,14 +14,14 @@ const store = createStore(
                 return state.cart
             }
         },
-
         mutations: {
             addToCart(state, product) {
                 let item = state.cart.find(i => i.id === product.id)
                 if (item) {
-                    item.quantity++;
+                    item.quantity += product.quantity;
                 } else {
-                    state.cart.push({ ...product, quantity: 1 })
+                    //state.cart.push({ ...product, quantity: 1 })
+                    state.cart.push({ ...product })
                 }
                 updateLocalStorage(state.cart)
             },

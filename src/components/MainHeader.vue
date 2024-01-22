@@ -5,9 +5,9 @@
                 Home
             </p>
         </router-link>
-        <router-link class="link" to="/card-detail">
+        <router-link class="link" to="/cart-detail">
             <p class="item-menu">
-                Card detail
+                Cart Detail
             </p>
         </router-link>
     </div>

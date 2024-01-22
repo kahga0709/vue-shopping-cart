@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import router from '../router/router';
-import store from '../store/store';
+import { ref } from "vue";
+import router from "../router/router";
+import store from "../store/store";
 
 const isOpenCard = ref(false);
+const cart = ref<any[]>(store.state.cart);
 
-const openCard = () => isOpenCard.value = true
+const openCard = () => (isOpenCard.value = true);
+const closeCard = () => (isOpenCard.value = false);
+const gotoCartDetail = () => router.push("/cart-detail");
 
-const closeCard = () => isOpenCard.value = false
-
-const gotoCardDetail = () => router.push('/card-detail')
-
-defineExpose({ openCard, isOpenCard })
-
-const data = ref<any[]>(store.state.cart)
+defineExpose({ openCard, isOpenCard });
 
 </script>
 
@@ -25,17 +22,21 @@ const data = ref<any[]>(store.state.cart)
                 <button class="close-button" @click="closeCard">close</button>
             </div>
 
-            <div class=" list">
-                <div class="item-list" v-for="(item, index) in data" :key="index">
+            <div class="list">
+                <div class="item-list" v-for="(item, index) in cart" :key="index">
                     <div class="row1">
-                        <img :src="`${item.image}`" height="55px" width="55px">
+                        <img :src="`${item.image}`" height="55px" width="55px" />
                         <div class="name-item">{{ item.name }}</div>
                     </div>
-                    <div class="row2">{{ item.quantity }} x 1.900.000đ</div>
+                    <div class="row2">{{ item.quantity }} x {{ item.price }}đ</div>
+                    <hr>
                 </div>
             </div>
+
+
+            <hr>
             <div class="check-out">
-                <div class="btn-btn1" @click="gotoCardDetail">XEM GIỎ HÀNG</div>
+                <div class="btn-btn1" @click="gotoCartDetail">XEM GIỎ HÀNG</div>
                 <div class="btn-btn2" @click="closeCard">THANH TOÁN</div>
             </div>
         </div>
@@ -87,12 +88,11 @@ h1 {
 }
 
 .btn-btn1 {
-    background-color: #ECECEC;
-    color: #2D2D2D;
+    background-color: #ececec;
+    color: #2d2d2d;
     margin-bottom: 10px;
     text-align: center;
     padding: 12px;
-
 }
 
 .btn-btn2 {
@@ -100,7 +100,6 @@ h1 {
     color: white;
     text-align: center;
     padding: 12px;
-
 }
 
 .item-list {
@@ -109,7 +108,6 @@ h1 {
 }
 
 .list {
-    flex: 1;
     overflow: auto;
 }
 

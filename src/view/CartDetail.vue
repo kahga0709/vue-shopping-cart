@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import Stepper from '../components/Stepper.vue';
 import store from '../store/store';
 
@@ -12,18 +12,34 @@ const addToCart = (item: any) => {
         price: item.price,
         description: item.description,
         image: item.image,
+        quantity: 1,
     })
+    getTotal();
 }
 
-const removeFromCart = (item: any) => {
-    store.commit('removeFromCart', {
-        id: item.id,
-    })
+const decreaseQuantity = (item: any) => {
+    store.commit('removeFromCart', { id: item.id })
+    getTotal()
 }
 
 const remove = (index: number) => {
     store.commit('remove', index)
+    getTotal()
 }
+
+const total = ref<number>(0)
+
+const getTotal = () => {
+    total.value = 0;
+    for (let index = 0; index < cart.value.length; index++) {
+        const element = cart.value[index];
+        total.value += (element.quantity * element.price);
+    }
+}
+
+onBeforeMount(() => {
+    getTotal()
+})
 
 </script>
 
@@ -34,9 +50,13 @@ const remove = (index: number) => {
         <img :src="`${item.image}`" height="50px" width="50px">
         <p class="name">{{ item.name }}</p>
         <p class="price">{{ item.price }}</p>
-        <p class="quantity"> {{ item.quantity }}</p>
-        <Stepper class="stepper" v-on:increment="addToCart(item)" v-on:decrement="removeFromCart(item)" />
+        <Stepper class="stepper" :initialQuantity="item.quantity" v-on:increment="addToCart(item)"
+            v-on:decrement="decreaseQuantity(item)" />
         <p class="temp-price">{{ item.price * item.quantity }}₫</p>
+    </div>
+    <div class="total-price-container">
+        <p class="total-price-title">TOTAL PRICE: </p>
+        <p class="total-price">{{ total }}đ</p>
     </div>
 </template>
 
@@ -75,6 +95,20 @@ h1 {
 
 .price {
     margin-left: 100px;
+}
+
+.total-price-container {
+    display: flex;
+    justify-content: center;
+}
+
+.total-price-title {
+    font-weight: 600;
+}
+
+.total-price {
+    color: red;
+    font-weight: 600;
 }
 </style>
 

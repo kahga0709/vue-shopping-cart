@@ -2,20 +2,22 @@
 import Card from '../components/Card.vue';
 import MButton from '../components/MButton.vue';
 import Stepper from '../components/Stepper.vue';
-import { onBeforeUpdate, ref } from 'vue'
+import { ref } from 'vue'
 import store from '../store/store';
 
 interface Props {
-    id: number,
-    name: string,
-    price: number,
-    description: string,
-    image: string,
+    id?: number,
+    name?: string,
+    price?: number,
+    description?: string,
+    image?: string,
 }
 
 const props = defineProps<Props>()
 
 const cardRef = ref<any>(null);
+
+let quantity: number = 1;
 
 const addToCart = () => {
     cardRef.value.openCard();
@@ -26,12 +28,14 @@ const addToCart = () => {
         price: props.price,
         description: props.description,
         image: props.image,
+        quantity: quantity,
     })
 }
 
-onBeforeUpdate(() => {
-    //TODO: format price
-})
+const getQuantity = (newQuantity: number) => {
+    quantity = newQuantity
+}
+
 </script>
 <template>
     <div class="detail-page">
@@ -48,9 +52,9 @@ onBeforeUpdate(() => {
             <p>Converse 1970s là 1 trong những dòng sản phẩm bán chạy nhất của Converse.Phần đế màu trắng ngà vintage được
                 phủ 1 lớp bóng bên ngoài là điểm nhấn riêng cho dòng 1970s, dễ vệ sinh hơn.</p>
 
-            <div class="b">
-                <Stepper class="2" />
-                <MButton class="bb" @click="addToCart" />
+            <div class="add-to-cart-row">
+                <Stepper class="stepper-button" v-on:quantity="getQuantity($event)" />
+                <MButton class="add-to-cart-button" @click="addToCart" />
             </div>
 
             <Card ref="cardRef" />
@@ -61,11 +65,11 @@ onBeforeUpdate(() => {
 
 
 <style scoped>
-.b {
+.add-to-cart-row {
     display: flex;
 }
 
-.bb {
+.add-to-cart-button {
     margin-left: 10px;
 }
 
