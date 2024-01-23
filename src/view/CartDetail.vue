@@ -2,6 +2,7 @@
 import { onBeforeMount, ref } from "vue";
 import Stepper from "../components/Stepper.vue";
 import store from "../store/store";
+import { formatCurrencyVND } from "../utils/format_currency_vnd";
 
 const cart = ref<any[]>(store.state.cart);
 const total = ref<number>(0);
@@ -47,18 +48,20 @@ const calculateTotalPrice = () => {
     <button class="delete-button" @click="remove(index)">delete</button>
     <img :src="`${item.image}`" height="50px" width="50px" />
     <p class="name">{{ item.name }}</p>
-    <p class="price">{{ item.price }}</p>
+    <p class="price">{{ formatCurrencyVND(item.price) }}</p>
     <Stepper
       class="stepper"
       :initialQuantity="item.quantity"
       v-on:increment="addToCart(item)"
       v-on:decrement="decreaseQuantity(item)"
     />
-    <p class="temp-price">{{ item.price * item.quantity }}₫</p>
+    <p class="temp-price">
+      {{ formatCurrencyVND(item.price * item.quantity) }}
+    </p>
   </div>
   <div class="total-price-container" v-show="total !== 0">
     <p class="total-price-title">TOTAL PRICE:</p>
-    <p class="total-price">{{ total }}đ</p>
+    <p class="total-price">{{ formatCurrencyVND(total) }}</p>
   </div>
 
   <!-- <div class="list">

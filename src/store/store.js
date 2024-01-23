@@ -20,7 +20,6 @@ const store = createStore(
                 if (item) {
                     item.quantity += product.quantity;
                 } else {
-                    //state.cart.push({ ...product, quantity: 1 })
                     state.cart.push({ ...product })
                 }
                 updateLocalStorage(state.cart)
