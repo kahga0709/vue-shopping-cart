@@ -4,6 +4,11 @@ import Stepper from '../components/Stepper.vue';
 import store from '../store/store';
 
 const cart = ref<any[]>(store.state.cart)
+const total = ref<number>(0)
+
+onBeforeMount(() => {
+    calculateTotalPrice()
+})
 
 const addToCart = (item: any) => {
     store.commit('addToCart', {
@@ -14,22 +19,20 @@ const addToCart = (item: any) => {
         image: item.image,
         quantity: 1,
     })
-    getTotal();
+    calculateTotalPrice();
 }
 
 const decreaseQuantity = (item: any) => {
     store.commit('removeFromCart', { id: item.id })
-    getTotal()
+    calculateTotalPrice()
 }
 
 const remove = (index: number) => {
     store.commit('remove', index)
-    getTotal()
+    calculateTotalPrice()
 }
 
-const total = ref<number>(0)
-
-const getTotal = () => {
+const calculateTotalPrice = () => {
     total.value = 0;
     for (let index = 0; index < cart.value.length; index++) {
         const element = cart.value[index];
@@ -37,9 +40,6 @@ const getTotal = () => {
     }
 }
 
-onBeforeMount(() => {
-    getTotal()
-})
 
 </script>
 
