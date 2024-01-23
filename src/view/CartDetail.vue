@@ -60,6 +60,21 @@ const calculateTotalPrice = () => {
     <p class="total-price-title">TOTAL PRICE:</p>
     <p class="total-price">{{ total }}đ</p>
   </div>
+
+  <!-- <div class="list">
+    <CartDetailItem
+      v-for="(item, index) in cart"
+      :key="index"
+      :name="item.name"
+      :image="`${item.image}`"
+      :price="item.price"
+      :initQty="item.quantity"
+      :totalPrice="total"
+      @increaseQty="increaseQty(item)"
+      @decreaseQty="decreaseQty(item)"
+      @remove="remove(index)"
+    />
+  </div> -->
 </template>
 
 <style scoped>
