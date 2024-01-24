@@ -44,23 +44,44 @@ const calculateTotalPrice = () => {
 
 <template>
   <h1>GIỎ HÀNG</h1>
+
+  <ul class="title-box" v-show="total !== 0">
+    <li class="title-box1">SẢN PHẨM</li>
+    <li class="title-box2">GIÁ</li>
+    <li class="title-box3">SỐ LƯỢNG</li>
+    <li class="title-box4">TẠM TÍNH</li>
+  </ul>
+
   <div v-for="(item, index) in cart" :key="index" class="item">
-    <button class="delete-button" @click="remove(index)">delete</button>
-    <img :src="`${item.image}`" height="50px" width="50px" />
-    <p class="name">{{ item.name }}</p>
-    <p class="price">{{ formatCurrencyVND(item.price) }}</p>
-    <Stepper
-      class="stepper"
-      :initialQuantity="item.quantity"
-      v-on:increment="addToCart(item)"
-      v-on:decrement="decreaseQuantity(item)"
-    />
-    <p class="temp-price">
-      {{ formatCurrencyVND(item.price * item.quantity) }}
-    </p>
+    <div class="box1">
+      <button class="delete-button" @click="remove(index)">Delete</button>
+      <img :src="`${item.image}`" height="55px" width="55px" />
+      <h4 class="name">{{ item.name }}</h4>
+    </div>
+
+    <div class="box2">
+      <p class="price">{{ formatCurrencyVND(parseInt(item.price)) }}</p>
+    </div>
+
+    <div class="box3">
+      <Stepper
+        class="stepper"
+        :initialQuantity="item.quantity"
+        v-on:increment="addToCart(item)"
+        v-on:decrement="decreaseQuantity(item)"
+      />
+    </div>
+
+    <div class="box4">
+      <p class="temp-price">
+        {{ formatCurrencyVND(item.price * item.quantity) }}
+      </p>
+    </div>
   </div>
+
   <div class="total-price-container" v-show="total !== 0">
-    <p class="total-price-title">TOTAL PRICE:</p>
+    <p class="total-price-title">TỔNG CỘNG GIỎ HÀNG</p>
+    <hr />
     <p class="total-price">{{ formatCurrencyVND(total) }}</p>
   </div>
 
@@ -95,31 +116,31 @@ h1 {
 
 .item {
   display: flex;
+  align-items: center;
   background-color: whitesmoke;
   padding: 12px;
-  margin: 8px;
+  margin: 15px 30px;
+  border: 1px solid gray;
 }
 
 .delete-button {
   height: 30px;
-  margin: 0px 8px;
 }
 
-.temp-price {
-  margin-left: 20px;
-}
-
-.stepper {
-  margin-left: 20px;
-}
-
+.temp-price,
 .price {
-  margin-left: 100px;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .total-price-container {
-  display: flex;
-  justify-content: center;
+  width: 350px;
+  height: 150px;
+  background-color: whitesmoke;
+  float: right;
+  margin: 0 30px;
+  text-align: center;
+  border: 2px solid gray;
 }
 
 .total-price-title {
@@ -127,7 +148,49 @@ h1 {
 }
 
 .total-price {
-  color: red;
   font-weight: 600;
+  font-size: 30px;
+}
+
+img {
+  margin: 0 10px;
+}
+
+.box1 {
+  display: flex;
+  align-items: center;
+  width: 49%;
+}
+
+.box3,
+.box2,
+.box4 {
+  width: 17%;
+  text-align: center;
+}
+
+.title-box {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin: 30px;
+}
+
+.title-box1 {
+  width: 49%;
+  text-align: center;
+  font-weight: 800;
+}
+
+.title-box3,
+.title-box2,
+.title-box4 {
+  width: 17%;
+  text-align: center;
+  font-weight: 800;
+}
+
+li {
+  display: inline-block;
 }
 </style>

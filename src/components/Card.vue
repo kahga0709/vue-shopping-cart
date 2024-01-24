@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import router from "../router/router";
 import store from "../store/store";
+import { formatCurrencyVND } from "../utils/format_currency_vnd";
 
 const isOpenCard = ref(false);
 const cart = ref<any[]>(store.state.cart);
@@ -27,7 +28,9 @@ defineExpose({ openCard, isOpenCard });
             <img :src="`${item.image}`" height="55px" width="55px" />
             <div class="name-item">{{ item.name }}</div>
           </div>
-          <div class="row2">{{ item.quantity }} x {{ item.price }}đ</div>
+          <div class="row2">
+            {{ item.quantity }} x {{ formatCurrencyVND(parseInt(item.price)) }}
+          </div>
           <hr />
         </div>
       </div>
@@ -35,7 +38,6 @@ defineExpose({ openCard, isOpenCard });
       <hr />
       <div class="check-out">
         <div class="btn-btn1" @click="gotoCartDetail">XEM GIỎ HÀNG</div>
-        <div class="btn-btn2" @click="closeCard">THANH TOÁN</div>
       </div>
     </div>
   </Transition>

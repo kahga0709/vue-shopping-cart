@@ -9,7 +9,7 @@ interface Product {
 const items: Product[] = [
     {
         id: 1,
-        name: '[ CHÍNH HÃNG ] Giày MLB Chunky Liner MID Màu Đen',
+        name: 'Giày MLB Chunky Liner MID Màu Đen',
         price: 1000000,
         description: "description",
         imageUrl: 'https://conversestore.vn/wp-content/uploads/2021/08/1-10.jpg',
@@ -51,7 +51,7 @@ const items: Product[] = [
     },
     {
         id: 7,
-        name: 'Comme Des Garçons Play x Converse High Black',
+        name: 'Comme Des Garçons Play',
         price: 2500000,
         description: "description",
         imageUrl: 'https://conversestore.vn/wp-content/uploads/2020/09/5-7.jpg',

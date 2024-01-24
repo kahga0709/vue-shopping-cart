@@ -19,6 +19,7 @@ const closeLoginForm = () => {
       <router-link class="link" to="/">
         <p class="item-menu">Home</p>
       </router-link>
+
       <router-link class="link" to="/cart-detail">
         <p class="item-menu">Cart Detail</p>
       </router-link>

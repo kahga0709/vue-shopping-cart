@@ -46,7 +46,7 @@ const getQuantity = (newQuantity: number) => {
       <h1>{{ props.name }}</h1>
       <p class="price">
         <span class="discount-price"
-          >{{ formatCurrencyVND(props.price) }}
+          >{{ formatCurrencyVND(Number(props.price)) }}
         </span>
         <span class="code">Mã SP: N/A</span>
       </p>
