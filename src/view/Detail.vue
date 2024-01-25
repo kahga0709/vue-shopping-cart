@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createApp, onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import Card from "../components/Card.vue";
 import MButton from "../components/MButton.vue";
 import Stepper from "../components/Stepper.vue";
