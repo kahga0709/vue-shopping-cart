@@ -1,34 +1,39 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { createApp, onBeforeMount, onMounted, ref } from "vue";
 import Card from "../components/Card.vue";
 import MButton from "../components/MButton.vue";
 import Stepper from "../components/Stepper.vue";
 import store from "../store/store";
 import { formatCurrencyVND } from "../utils/format_currency_vnd";
+import { useRoute } from "vue-router";
+import items from "../data/items";
 
-interface Props {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  description?: string;
-}
-
-const props = defineProps<Props>();
+const route = useRoute();
 
 const cardRef = ref<any>(null);
 
 let quantity: number = 1;
 
+const product = ref<any>();
+
+onBeforeMount(() => {
+  fetchProductById(Number(route.params.id));
+});
+
+const fetchProductById = (id: number) => {
+  const foundItem = items.find((item) => item.id === id);
+  product.value = foundItem;
+};
+
 const addToCart = () => {
   cardRef.value.openCard();
 
   const item = {
-    id: props.id,
-    name: props.name,
-    price: props.price,
-    description: props.description,
-    image: props.image,
+    id: product.value.id,
+    name: product.value.name,
+    price: product.value.price,
+    description: product.value.description,
+    image: product.value.image,
     quantity: quantity,
   };
 
@@ -42,13 +47,13 @@ const setQuantity = (newQuantity: number) => {
 <template>
   <div class="detail-page">
     <div class="image-info">
-      <img class="image" :src="`${props.image}`" />
+      <img class="image" :src="`${product.imageUrl}`" />
     </div>
     <div class="order-info">
-      <h1>{{ props.name }}</h1>
+      <h1>{{ product.name }}</h1>
       <p class="price">
         <span class="discount-price"
-          >{{ formatCurrencyVND(Number(props.price)) }}
+          >{{ formatCurrencyVND(Number(product.price)) }}
         </span>
         <span class="code">Mã SP: N/A</span>
       </p>

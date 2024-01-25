@@ -1,19 +1,17 @@
 <script setup lang="ts" name="Home">
 import { computed, ref } from "vue";
-import router from "../router/router";
+//import router from "../router/router";
 import items from "../data/items";
 import ProductCard from "../components/ProductCard.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const word = ref<string>("");
 const sortSelected = ref<string>("");
 const products = ref<any>(items);
 
-const gotoDetail = (item: any) => {
-  const { id, name, price, description, imageUrl } = item;
-  router.push({
-    name: "DetailPage",
-    params: { id, name, price, description, image: imageUrl },
-  });
+const navigateToDetail = (id: number) => {
+  router.push({ name: "DetailPage", params: { id } });
 };
 
 const search = computed(() => {
@@ -56,7 +54,7 @@ const sort = computed(() => {
         :image="item.imageUrl"
         :name="item.name"
         :price="item.price"
-        @onClick="gotoDetail(item)"
+        @onClick="navigateToDetail(item.id)"
       />
     </div>
   </div>
