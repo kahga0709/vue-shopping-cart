@@ -1,36 +1,72 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const email = ref<string>("");
+const emailError = ref<string>("");
+const password = ref<string>("");
+const passwordError = ref<string>("");
+
 const emit = defineEmits(["close"]);
+
+const validateForm = () => {
+  emailError.value = "";
+  passwordError.value = "";
+
+  if (!email.value) {
+    emailError.value = "Email is required";
+  } else if (!isValidEmail(email.value)) {
+    emailError.value = "Invalid email format";
+  }
+
+  if (!password.value) {
+    passwordError.value = "Password is required";
+  } else if (password.value.length < 6) {
+    passwordError.value = "Password should have at least 6 characters";
+  }
+
+  if (!emailError.value && !passwordError.value) {
+    login();
+  }
+};
+
+const isValidEmail = (email: string): boolean => {
+  return emailRegex.test(email);
+};
+
+const login = () => {
+  emit("close");
+};
 </script>
 
 <template>
   <div id="myModal" class="modal">
     <div class="modal-content">
-      <form>
+      <form @submit.prevent="validateForm">
         <div class="container">
-          <label for="uname"><b>Username</b></label>
+          <h4 @click="emit('close')">X</h4>
+
+          <label for="email"><b>Email</b></label>
           <input
             type="text"
-            placeholder="Enter Username"
-            name="uname"
+            placeholder="Enter email"
             required
+            v-model="email"
           />
+          <p v-if="emailError" class="error">{{ emailError }}</p>
 
           <label for="psw"><b>Password</b></label>
           <input
             type="password"
             placeholder="Enter Password"
-            name="psw"
             required
+            v-model="password"
           />
-          <button type="submit">Login</button>
+          <p v-if="passwordError" class="error">{{ passwordError }}</p>
 
-          <label> <input type="checkbox" name="remember" /> Remember me </label>
-
-          <div class="container" style="background-color: #f1f1f1">
-            <button type="button" class="cancel-btn" @click="emit('close')">
-              Cancel
-            </button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
+          <div class="submit-container">
+            <button type="submit">Login</button>
           </div>
         </div>
       </form>
@@ -46,17 +82,11 @@ button {
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 300px;
 }
 
 button:hover {
   opacity: 0.8;
-}
-
-.cancel-btn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: #f44336;
 }
 
 input[type="text"],
@@ -70,12 +100,7 @@ input[type="password"] {
 }
 
 .container {
-  padding: 16px;
-}
-
-span.psw {
-  float: right;
-  padding-top: 16px;
+  padding: 26px;
 }
 
 .modal {
@@ -94,8 +119,24 @@ span.psw {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto 15% auto;
+  margin: 10% auto 30% auto;
   border: 1px solid #888;
-  width: 80%;
+  width: 500px;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+  margin: 0;
+}
+
+h4 {
+  margin: 0px 10px 0px 0px;
+  text-align: end;
 }
 </style>
