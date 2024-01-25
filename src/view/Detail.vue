@@ -23,17 +23,19 @@ let quantity: number = 1;
 const addToCart = () => {
   cardRef.value.openCard();
 
-  store.commit("addToCart", {
+  const item = {
     id: props.id,
     name: props.name,
     price: props.price,
     description: props.description,
     image: props.image,
     quantity: quantity,
-  });
+  };
+
+  store.commit("addToCart", item);
 };
 
-const getQuantity = (newQuantity: number) => {
+const setQuantity = (newQuantity: number) => {
   quantity = newQuantity;
 };
 </script>
@@ -58,7 +60,7 @@ const getQuantity = (newQuantity: number) => {
       </p>
 
       <div class="add-to-cart-row">
-        <Stepper class="stepper-button" v-on:quantity="getQuantity($event)" />
+        <Stepper class="stepper-button" v-on:quantity="setQuantity($event)" />
         <MButton class="add-to-cart-button" @click="addToCart" />
       </div>
 

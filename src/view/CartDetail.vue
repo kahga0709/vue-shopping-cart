@@ -12,14 +12,9 @@ onBeforeMount(() => {
 });
 
 const addToCart = (item: any) => {
-  store.commit("addToCart", {
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    description: item.description,
-    image: item.image,
-    quantity: 1,
-  });
+  const { id, name, price, description, image } = item;
+  const cartItem = { id, name, price, description, image, quantity: 1 };
+  store.commit("addToCart", cartItem);
   calculateTotalPrice();
 };
 
@@ -28,17 +23,17 @@ const decreaseQuantity = (item: any) => {
   calculateTotalPrice();
 };
 
-const remove = (index: number) => {
+const removeItem = (index: number) => {
   store.commit("remove", index);
   calculateTotalPrice();
 };
 
 const calculateTotalPrice = () => {
-  total.value = 0;
-  for (let index = 0; index < cart.value.length; index++) {
-    const element = cart.value[index];
-    total.value += element.quantity * element.price;
-  }
+  const totalPrice = cart.value.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
+  total.value = totalPrice;
 };
 </script>
 
@@ -54,7 +49,7 @@ const calculateTotalPrice = () => {
 
   <div v-for="(item, index) in cart" :key="index" class="item">
     <div class="box1">
-      <button class="delete-button" @click="remove(index)">Delete</button>
+      <button class="delete-button" @click="removeItem(index)">Delete</button>
       <img :src="`${item.image}`" height="55px" width="55px" />
       <h4 class="name">{{ item.name }}</h4>
     </div>

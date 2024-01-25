@@ -1,5 +1,5 @@
 <script setup lang="ts" name="Home">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import router from "../router/router";
 import items from "../data/items";
 import ProductCard from "../components/ProductCard.vue";
@@ -9,31 +9,26 @@ const sortSelected = ref<string>("");
 const products = ref<any>(items);
 
 const gotoDetail = (item: any) => {
+  const { id, name, price, description, imageUrl } = item;
   router.push({
     name: "DetailPage",
-    params: {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      description: item.description,
-      image: item.imageUrl,
-    },
+    params: { id, name, price, description, image: imageUrl },
   });
 };
 
-const search = () => {
+const search = computed(() => {
   products.value = items.filter((item) =>
     item.name.toLowerCase().includes(word.value.toLowerCase())
   );
-};
+});
 
-const sort = () => {
+const sort = computed(() => {
   if (sortSelected.value === "Giá giảm dần") {
     products.value = items.sort((n1, n2) => n1.price - n2.price);
   } else if (sortSelected.value === "Giá tăng dần") {
     products.value = items.sort((n1, n2) => n2.price - n1.price);
   }
-};
+});
 </script>
 
 <template>
@@ -43,11 +38,11 @@ const sort = () => {
       type="text"
       v-model="word"
       placeholder="Tìm kiếm sản phẩm"
-      @change="search"
+      @change="() => search"
     />
 
     <div class="sort-container">
-      <select v-model="sortSelected" @change="sort">
+      <select v-model="sortSelected" @change="() => sort">
         <option disabled value="">Chọn kiểu sort</option>
         <option>Giá giảm dần</option>
         <option>Giá tăng dần</option>

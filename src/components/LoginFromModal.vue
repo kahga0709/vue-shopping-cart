@@ -12,9 +12,13 @@ const passwordError = ref<string>("");
 
 const emit = defineEmits(["close"]);
 
-const validateForm = () => {
+const clearErrors = () => {
   emailError.value = "";
   passwordError.value = "";
+};
+
+const validateForm = () => {
+  clearErrors();
 
   if (!email.value) {
     emailError.value = "Email is required";
