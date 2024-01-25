@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import LoginFromModal from "./LoginFromModal.vue";
+import { useAuthStore } from "../store/pinia/auth";
 import { ref } from "vue";
+import { Icon } from "@iconify/vue";
+
+const authStore = useAuthStore();
 
 const isOpenLogin = ref(false);
 
@@ -25,8 +29,12 @@ const closeLoginForm = () => {
       </router-link>
     </div>
 
-    <div class="login-register">
+    <div class="login-register" v-if="!authStore.isLogin">
       <span @click="openLoginForm">Login</span>
+    </div>
+    <div v-else>
+      <span>{{ authStore.email }}</span>
+      <Icon icon="mdi-light:home" />
     </div>
   </header>
 
@@ -62,3 +70,4 @@ header {
   margin-right: 50px;
 }
 </style>
+../store/pinia/auth

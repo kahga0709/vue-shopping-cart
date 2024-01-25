@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useAuthStore } from "../store/pinia/auth";
+const authStore = useAuthStore();
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -37,6 +39,7 @@ const isValidEmail = (email: string): boolean => {
 
 const login = () => {
   emit("close");
+  authStore.login(email.value, password.value);
 };
 </script>
 
