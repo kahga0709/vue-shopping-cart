@@ -11,20 +11,25 @@ const sortSelected = ref<string>("");
 const products = ref<any>(items);
 
 const navigateToDetail = (id: number) => {
-  router.push({ name: "DetailPage", params: { id } });
+  const routeParams = { name: "DetailPage", params: { id } };
+  router.push(routeParams);
 };
-
-const search = computed(() => {
-  products.value = items.filter((item) =>
-    item.name.toLowerCase().includes(word.value.toLowerCase())
-  );
-});
 
 const sort = computed(() => {
   if (sortSelected.value === "Giá giảm dần") {
     products.value = items.sort((n1, n2) => n1.price - n2.price);
   } else if (sortSelected.value === "Giá tăng dần") {
     products.value = items.sort((n1, n2) => n2.price - n1.price);
+  }
+});
+
+const searchByName = computed(() => {
+  if (word.value.trim()) {
+    products.value = items.filter((item) =>
+      item.name.toLowerCase().includes(word.value.trim().toLowerCase())
+    );
+  } else {
+    products.value = items;
   }
 });
 </script>
@@ -36,7 +41,7 @@ const sort = computed(() => {
       type="text"
       v-model="word"
       placeholder="Tìm kiếm sản phẩm"
-      @change="() => search"
+      @change="() => searchByName"
     />
 
     <div class="sort-container">

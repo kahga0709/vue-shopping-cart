@@ -58,14 +58,14 @@ const items: Product[] = [
     },
     {
         id: 8,
-        name: 'Comme Des Garçons Play x Converse High White',
+        name: 'Comme Des Garçons Play',
         price: 1500000,
         description: "description",
         imageUrl: 'https://conversestore.vn/wp-content/uploads/2021/08/5-11.jpg',
     },
     {
         id: 9,
-        name: 'Comme Des Garçons Play x Converse Low',
+        name: 'Comme Des Garçons Play',
         price: 3000000,
         description: "description",
         imageUrl: 'https://conversestore.vn/wp-content/uploads/2021/11/MOVE-2-1200x1200.png',

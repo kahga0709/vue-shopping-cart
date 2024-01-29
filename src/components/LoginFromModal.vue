@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useAuthStore } from "../store/pinia/auth";
+import { registerUser, loginUser } from "../firebase/auth";
+
 const authStore = useAuthStore();
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -9,6 +11,8 @@ const email = ref<string>("");
 const emailError = ref<string>("");
 const password = ref<string>("");
 const passwordError = ref<string>("");
+
+let type: number = 1;
 
 const emit = defineEmits(["close"]);
 
@@ -33,7 +37,7 @@ const validateForm = () => {
   }
 
   if (!emailError.value && !passwordError.value) {
-    login();
+    type === 1 ? login() : register();
   }
 };
 
@@ -44,6 +48,11 @@ const isValidEmail = (email: string): boolean => {
 const login = () => {
   emit("close");
   authStore.login(email.value, password.value);
+  loginUser(email.value, password.value);
+};
+
+const register = () => {
+  registerUser(email.value, password.value);
 };
 </script>
 
@@ -73,7 +82,8 @@ const login = () => {
           <p v-if="passwordError" class="error">{{ passwordError }}</p>
 
           <div class="submit-container">
-            <button type="submit">Login</button>
+            <button type="submit" @click="type = 1">Login</button>
+            <button type="submit" @click="type = 2">Register</button>
           </div>
         </div>
       </form>
@@ -133,6 +143,7 @@ input[type="password"] {
 
 .submit-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
 }
 
