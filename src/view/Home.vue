@@ -1,16 +1,20 @@
 <script setup lang="ts" name="Home">
-import { computed, ref } from "vue";
-//import router from "../router/router";
-import items from "../data/items";
+import { computed, onBeforeMount, ref } from "vue";
+import items, { Product } from "../data/items";
 import ProductCard from "../components/ProductCard.vue";
 import { useRouter } from "vue-router";
+import { fetchProducts } from "../firebase/service";
 
 const router = useRouter();
 const word = ref<string>("");
 const sortSelected = ref<string>("");
-const products = ref<any>(items);
+const products = ref<Product[]>([]);
 
-const navigateToDetail = (id: number) => {
+onBeforeMount(async () => {
+  products.value = await fetchProducts();
+});
+
+const navigateToDetail = (id: string) => {
   const routeParams = { name: "DetailPage", params: { id } };
   router.push(routeParams);
 };

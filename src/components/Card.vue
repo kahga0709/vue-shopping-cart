@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import router from "../router/router";
-import store from "../store/store";
 import { formatCurrencyVND } from "../utils/format_currency_vnd";
+import { fetchCart } from "../firebase/service";
+import { Product } from "../data/items";
 
 const isOpenCard = ref(false);
-const cart = ref<any[]>(store.state.cart);
+const cart = ref<Product[] | undefined>([]);
+
+onBeforeMount(async () => {
+  cart.value = await fetchCart();
+});
 
 const openCard = () => (isOpenCard.value = true);
 const closeCard = () => (isOpenCard.value = false);
-const gotoCartDetail = () => router.push("/cart-detail");
 
-defineExpose({ openCard, isOpenCard });
+const onRefresh = async () => {
+  cart.value = await fetchCart();
+};
+
+const navigateToCartDetail = () => router.push("/cart-detail");
+
+defineExpose({ openCard, isOpenCard, onRefresh });
 </script>
 
 <template>
@@ -25,11 +35,11 @@ defineExpose({ openCard, isOpenCard });
       <div class="list">
         <div class="item-list" v-for="(item, index) in cart" :key="index">
           <div class="row1">
-            <img :src="`${item.image}`" height="55px" width="55px" />
+            <img :src="`${item.imageUrl}`" height="55px" width="55px" />
             <div class="name-item">{{ item.name }}</div>
           </div>
           <div class="row2">
-            {{ item.quantity }} x {{ formatCurrencyVND(parseInt(item.price)) }}
+            {{ item.qty }} x {{ formatCurrencyVND(item.price) }}
           </div>
           <hr />
         </div>
@@ -37,7 +47,7 @@ defineExpose({ openCard, isOpenCard });
 
       <hr />
       <div class="check-out">
-        <div class="btn-btn1" @click="gotoCartDetail">XEM GIỎ HÀNG</div>
+        <div class="btn-btn1" @click="navigateToCartDetail">XEM GIỎ HÀNG</div>
       </div>
     </div>
   </Transition>

@@ -1,8 +1,8 @@
-interface CartModel {
-    id: number,
-    name: string,
-    price: string,
-    description: string,
-    image: string,
-    quantity: number,
+export interface CartModel {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  qty: number;
 }

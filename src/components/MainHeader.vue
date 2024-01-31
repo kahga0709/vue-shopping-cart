@@ -2,7 +2,6 @@
 import LoginFromModal from "./LoginFromModal.vue";
 import { useAuthStore } from "../store/pinia/auth";
 import { ref } from "vue";
-import { Icon } from "@iconify/vue";
 
 const authStore = useAuthStore();
 
@@ -34,7 +33,6 @@ const closeLoginForm = () => {
     </div>
     <div v-else>
       <span>{{ authStore.email }}</span>
-      <Icon icon="mdi-light:home" />
     </div>
   </header>
 

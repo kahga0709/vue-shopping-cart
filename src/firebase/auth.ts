@@ -2,7 +2,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
 import { auth } from "../firebase/firebase";
+import { useAuthStore } from "../store/pinia/auth";
 
 export async function registerUser(email: string, password: string) {
   try {
@@ -28,8 +30,8 @@ export async function loginUser(email: string, password: string) {
       password
     );
     const user = userCredential.user;
-    console.log(user);
     // Handle the user data as needed
+    useAuthStore().setUID(user.uid);
   } catch (error) {
     console.log(error);
     // Handle the error as needed

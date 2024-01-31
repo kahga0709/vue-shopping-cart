@@ -1,39 +1,45 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import Stepper from "../components/Stepper.vue";
-import store from "../store/store";
 import { formatCurrencyVND } from "../utils/format_currency_vnd";
+import { fetchCart, removeCartItem, updateQty } from "../firebase/service";
+import { Product } from "../data/items";
 
-const cart = ref<any[]>(store.state.cart);
+const cart = ref<Product[] | undefined>([]);
 const total = ref<number>(0);
 
-onBeforeMount(() => {
-  calculateTotalPrice();
-});
+onBeforeMount(async () => onRefresh());
 
-const addToCart = (item: any) => {
-  const { id, name, price, description, image } = item;
-  const cartItem = { id, name, price, description, image, quantity: 1 };
-  store.commit("addToCart", cartItem);
-  calculateTotalPrice();
+const decreaseQuantity = async (id: string) => {
+  updateQty(id, "dec");
+  onRefresh();
 };
 
-const decreaseQuantity = (item: any) => {
-  store.commit("removeFromCart", { id: item.id });
-  calculateTotalPrice();
+const increaseQuantity = async (id: string) => {
+  updateQty(id, "inc");
+  onRefresh();
 };
 
-const removeItem = (index: number) => {
-  store.commit("remove", index);
+const removeItem = async (id: string) => {
+  await removeCartItem(id);
+  onRefresh();
+};
+
+const onRefresh = async () => {
+  cart.value = await fetchCart();
+  console.log(cart.value);
+
   calculateTotalPrice();
 };
 
 const calculateTotalPrice = () => {
-  const totalPrice = cart.value.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
-  total.value = totalPrice;
+  if (cart.value) {
+    const totalPrice = cart.value.reduce(
+      (acc, item) => acc + (item?.qty ?? 0) * item.price,
+      0
+    );
+    total.value = totalPrice;
+  }
 };
 </script>
 
@@ -49,27 +55,27 @@ const calculateTotalPrice = () => {
 
   <div v-for="(item, index) in cart" :key="index" class="item">
     <div class="box1">
-      <button class="delete-button" @click="removeItem(index)">Delete</button>
-      <img :src="`${item.image}`" height="55px" width="55px" />
+      <button class="delete-button" @click="removeItem(item.id)">Delete</button>
+      <img :src="`${item.imageUrl}`" height="55px" width="55px" />
       <h4 class="name">{{ item.name }}</h4>
     </div>
 
     <div class="box2">
-      <p class="price">{{ formatCurrencyVND(parseInt(item.price)) }}</p>
+      <p class="price">{{ formatCurrencyVND(item.price) }}</p>
     </div>
 
     <div class="box3">
       <Stepper
         class="stepper"
-        :initialQuantity="item.quantity"
-        v-on:increment="addToCart(item)"
-        v-on:decrement="decreaseQuantity(item)"
+        :initialQuantity="item.qty"
+        v-on:increment="increaseQuantity(item.id)"
+        v-on:decrement="decreaseQuantity(item.id)"
       />
     </div>
 
     <div class="box4">
       <p class="temp-price">
-        {{ formatCurrencyVND(item.price * item.quantity) }}
+        {{ formatCurrencyVND(item.price * (item.qty ?? 0)) }}
       </p>
     </div>
   </div>
